@@ -105,6 +105,8 @@ gcloud projects add-iam-policy-binding \
 echo "> Configuring bootstrap job"
 rm -rf "./bootstrap.cloudbuild.yaml"
 cat <<'EOT_BOOT' > "./bootstrap.cloudbuild.yaml"
+tags:
+- "gcp-mig-simple-bootstrapping"
 steps:
 - id: create_new_cloud_source_repo
   name: "gcr.io/cloud-builders/gcloud"
@@ -198,6 +200,7 @@ echo "> Executing bootstrap job"
 gcloud builds submit \
     --project "$PROJECT_ID" \
     --config ./bootstrap.cloudbuild.yaml \
+    --no-source \
     --no-user-output-enabled \
     --quiet
 rm ./bootstrap.cloudbuild.yaml
