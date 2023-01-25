@@ -1,0 +1,24 @@
+substitutions:
+  _SANDBOX_PROJECT_NAME: undefined
+steps:
+  - id: test-setup
+    name: gcr.io/cloud-builders/gcloud
+    env:
+      - '_SANDBOX_PROJECT_NAME=${_SANDBOX_PROJECT_NAME}'
+    script: |
+      #!/bin/bash
+      set -e
+
+      echo "Running setup.sh in ${_SANDBOX_PROJECT_NAME}"
+      bash setup.sh ${_SANDBOX_PROJECT_NAME} yes
+
+  - id: test-teardown
+    name: gcr.io/cloud-builders/gcloud
+    env:
+      - '_SANDBOX_PROJECT_NAME=${_SANDBOX_PROJECT_NAME}'
+    script: |
+      #!/bin/bash
+      set -e
+
+      echo "Running teardown.sh in ${_SANDBOX_PROJECT_NAME}"
+      bash teardown.sh ${_SANDBOX_PROJECT_NAME} yes
