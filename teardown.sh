@@ -21,6 +21,7 @@ echo "> Checking GCP CLI tool is installed"
 gcloud --version > /dev/null 2>&1
 
 readonly EXPLICIT_PROJECT_ID="$1"
+readonly EXPLICIT_CONSENT="$2"
 
 if [ -z "$EXPLICIT_PROJECT_ID" ]; then
     echo "> No explicit project id provided, trying to infer"
@@ -44,8 +45,13 @@ else
     echo -e "  * you must ${RED}manually${NC} disable APIs services\n"
 fi
 
-echo -e "Enter ${BLUE}'yes'${NC} if you want to proceed:"
-read CONSENT
+if [ "$EXPLICIT_CONSENT" == "yes" ]; then
+  echo "Proceeding under explicit consent"
+  readonly CONSENT="$EXPLICIT_CONSENT"
+else
+    echo -e "Enter ${BLUE}'yes'${NC} if you want to proceed:"
+    read CONSENT
+fi
 
 if [ "$CONSENT" != "yes" ]; then
     echo -e "\nERROR: Aborted by user"
